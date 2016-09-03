@@ -217,6 +217,9 @@ Plugin::load('BootstrapUI');
 Plugin::load('Muffin/Slug');
 //Plugin::load('Muffin/Tags');
 
+// add MySQL point support
+Type::map('point', 'App\Database\Type\PointType');
+
 
 
 /* App specific */

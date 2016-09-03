@@ -44,6 +44,40 @@ class VenuesController extends AppController
         $this->set('_serialize', ['venue']);
     }
 
+
+        /**
+     * Add method
+     *
+     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
+     */
+    public function simple_add()
+    {
+        $venue = $this->Venues->newEntity();
+        if ($this->request->is('post')) {
+            $venue = $this->Venues->patchEntity($venue, $this->request->data);
+            if ($this->Venues->save($venue)) {
+                $this->Flash->success(__('The venue has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The venue could not be saved. Please, try again.'));
+            }
+        }
+        $provinces = $this->Venues->Provinces->find('list', ['limit' => 200]);
+        $countries = $this->Venues->Countries->find('list', ['limit' => 200]);
+        $cities = $this->Venues->Cities->find('list', ['limit' => 200]);
+        $neighbourhoods = $this->Venues->Neighbourhoods->find('list', ['limit' => 200]);
+        $establishmentTypes = $this->Venues->EstablishmentTypes->find('list', ['limit' => 200]);
+        $insideVenues = $this->Venues->InsideVenues->find('list', ['limit' => 200]);
+        $amenities = $this->Venues->Amenities->find('list', ['limit' => 200]);
+        $cuisines = $this->Venues->Cuisines->find('list', ['limit' => 200]);
+        $features = $this->Venues->Features->find('list', ['limit' => 200]);
+        $venuePhotos = $this->Venues->VenuePhotos->find('list', ['limit' => 200]);
+        $this->set(compact('venue', 'provinces', 'countries', 'cities', 'neighbourhoods', 'establishmentTypes', 'insideVenues', 'amenities', 'cuisines', 'features', 'venuePhotos'));
+        $this->set('_serialize', ['venue']);
+    }
+
+
     /**
      * Add method
      *
