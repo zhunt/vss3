@@ -221,7 +221,6 @@ Plugin::load('Muffin/Slug');
 Type::map('point', 'App\Database\Type\PointType');
 
 
-
 /* App specific */
 Configure::write('siteUrlFull', 'http://www.maximumventure.ca');
 Configure::write('websiteName', 'MaximumVenture');

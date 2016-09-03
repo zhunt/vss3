@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Database\Schema\Table as Schema;
 
 /**
  * Venues Model
@@ -32,6 +33,13 @@ use Cake\Validation\Validator;
  */
 class VenuesTable extends Table
 {
+
+
+    protected function _initializeSchema(Schema $schema)
+    {
+        $schema->columnType('geo_cords', 'point');
+        return $schema;
+    }
 
     /**
      * Initialize method
@@ -70,7 +78,7 @@ class VenuesTable extends Table
         $this->belongsTo('InsideVenues', [
             'foreignKey' => 'id',
             'className' => 'Venues',
-            'conditions' => ['flag_mall' => true]
+            'conditions' => ['InsideVenues.flag_mall' => true]
         ]);
         $this->belongsToMany('Amenities', [
             'foreignKey' => 'venue_id',
@@ -109,7 +117,7 @@ class VenuesTable extends Table
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
-
+/*
         $validator
             ->requirePresence('slug', 'create')
             ->notEmpty('slug');
@@ -189,6 +197,7 @@ class VenuesTable extends Table
         $validator
             ->integer('user_votes')
             ->allowEmpty('user_votes');
+    */
 
         return $validator;
     }

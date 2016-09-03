@@ -55,6 +55,7 @@ class VenuesController extends AppController
         $venue = $this->Venues->newEntity();
         if ($this->request->is('post')) {
             $venue = $this->Venues->patchEntity($venue, $this->request->data);
+            debug($venue);
             if ($this->Venues->save($venue)) {
                 $this->Flash->success(__('The venue has been saved.'));
 

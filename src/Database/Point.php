@@ -1,34 +1,97 @@
-<?php 
-//src/Database/Point.php
+<?php
+
 namespace App\Database;
 
-// Our value object is immutable.
-class Point
+use Cake\Database\ExpressionInterface;
+use Cake\Database\Expression\FunctionExpression;
+use Cake\Database\ValueBinder;
+
+class Point implements \JsonSerializable, ExpressionInterface
 {
-    protected $_lat;
-    protected $_long;
 
-    // Factory method.
-    public static function parse($value)
+    private $__x;
+    private $__y;
+
+    /**
+     * Constructs a point with X and Y coordinates
+     *
+     * @param float $x X coordinate
+     * @param float $y Y coordinate
+     */
+    public function __construct($x, $y)
     {
-        // Parse the data from MySQL.
-        return new static($value[0], $value[1]);
+        $this->__x = $x;
+        $this->__y = $y;
     }
 
-    public function __construct($lat, $long)
+    /**
+     * Creates a point instance from a MySQL ASTEXT representation
+     *
+     * @param string $text MySQL ASTEXT representation
+     * @return Point Constructed point
+     */
+    public static function fromText($text)
     {
-        $this->_lat = $lat;
-        $this->_long = $long;
+        list($x, $y) = sscanf($text, 'POINT(%f %f)');
+
+        return new Point($x, $y);
     }
 
-    public function lat()
+    /**
+     * Returns the X coordinate
+     *
+     * @return float X coordinate
+     */
+    public function x()
     {
-        return $this->_lat;
+        return $this->__x;
     }
 
-    public function long()
+    /**
+     * Returns the Y coordinate
+     *
+     * @return float Y coordinate
+     */
+    public function y()
     {
-        return $this->_long;
+        return $this->__y;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'x' => $this->__x,
+            'y' => $this->__y
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sql(ValueBinder $generator)
+    {
+        $expression = new FunctionExpression('POINT', [$this->x(), $this->y()]);
+
+        return $expression->sql($generator);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function traverse(callable $visitor)
+    {
+        $visitor($this->__x);
+        $visitor($this->__y);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+        return $this->x() . ', ' . $this->y();
     }
 }
-?>
