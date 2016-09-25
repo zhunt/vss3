@@ -7,11 +7,19 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Cake\Database\Schema\Table as Schema;
+
 /**
  * Cities Model
  */
 class CitiesTable extends Table
 {
+
+    protected function _initializeSchema(Schema $schema)
+    {
+        $schema->columnType('geo_cords', 'point');
+        return $schema;
+    }
 
     /**
      * Initialize method
@@ -21,9 +29,16 @@ class CitiesTable extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
         $this->table('cities');
         $this->displayField('name');
         $this->primaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Muffin/Slug.Slug');
+
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
             'joinType' => 'INNER'
@@ -32,6 +47,8 @@ class CitiesTable extends Table
             'foreignKey' => 'country_id',
             'joinType' => 'INNER'
         ]);
+
+        // left over from BartenderTraining?
         $this->hasMany('Schools', [
             'foreignKey' => 'city_id'
         ]);
@@ -49,18 +66,19 @@ class CitiesTable extends Table
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create');
             
-        $validator
+       /* $validator
             ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
+            ->notEmpty('slug'); */
             
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
-            
+            /*
         $validator
             ->add('flag_featured', 'valid', ['rule' => 'boolean'])
-            ->requirePresence('flag_featured', 'create')
+            ->requirePresence('flag_featured', 'update')
             ->notEmpty('flag_featured');
+            */
 
         return $validator;
     }
@@ -77,5 +95,26 @@ class CitiesTable extends Table
         $rules->add($rules->existsIn(['province_id'], 'Provinces'));
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
         return $rules;
+    }
+
+
+    // methods
+
+    public function updateCity(array $options) {
+        $newCity = $options['name'];
+        $provinceId = $options['province_id'];
+        $countryId = $options['country_id'];
+        $geoCords =  '43.653226, -79.383184'; // "43.6534199,-79.3899873"; // $options['geo_cords']; 
+
+        debug($geoCords);
+
+        $city = $this->findOrCreate([
+            'name' => $newCity, 
+            'country_id' => $countryId, 
+            'province_id' => $provinceId,
+            //'geo_cords' => '43.653226, -79.383184'
+            ]); debug($city);
+
+        return $city->id;
     }
 }

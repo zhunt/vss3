@@ -20,9 +20,12 @@ class City extends Entity
         'city_text' => true,
         'province_id' => true,
         'country_id' => true,
+        'geo_cords' => true,
         'flag_featured' => true,
         'province' => true,
         'country' => true,
         'schools' => true,
     ];
+
+    
 }

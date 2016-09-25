@@ -50,6 +50,20 @@ class CitiesController extends AppController
     {
         $city = $this->Cities->newEntity();
         if ($this->request->is('post')) {
+
+            if ( empty($this->request->data['geo_cords']) ) {//debug($this->request->data); 
+
+                $this->loadComponent('Geocode');
+                $geo = $this->Geocode->reEncodeCity( 
+                    $this->request->data['name'], 
+                    $this->Cities->Provinces->get($this->request->data['province_id'], ['fields' => ['id','name'] ] )->toArray(),
+                    $this->Cities->Countries->get($this->request->data['country_id'], ['fields' => ['id','name'] ] )->toArray() 
+                    );
+
+                $this->request->data['geo_cords'] = "{$geo['geoLatt']} , {$geo['geoLong']}";
+               
+            }
+                        
             $city = $this->Cities->patchEntity($city, $this->request->data);
             if ($this->Cities->save($city)) {
                 $this->Flash->success('The city has been saved.');
@@ -77,6 +91,21 @@ class CitiesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+
+            if ( empty($this->request->data['geo_cords']) ) {//debug($this->request->data); 
+
+                $this->loadComponent('Geocode');
+                $geo = $this->Geocode->reEncodeCity( 
+                    $this->request->data['name'], 
+                    $this->Cities->Provinces->get($this->request->data['province_id'], ['fields' => ['id','name'] ] )->toArray(),
+                    $this->Cities->Countries->get($this->request->data['country_id'], ['fields' => ['id','name'] ] )->toArray() 
+                    );
+
+                $this->request->data['geo_cords'] = "{$geo['geoLatt']} , {$geo['geoLong']}";
+               
+            }
+            
+            
             $city = $this->Cities->patchEntity($city, $this->request->data);
             if ($this->Cities->save($city)) {
                 $this->Flash->success('The city has been saved.');

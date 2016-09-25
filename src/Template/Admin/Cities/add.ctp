@@ -18,6 +18,7 @@
             echo $this->Form->input('slug');
             echo $this->Form->input('name');
             echo $this->Form->input('city_text');
+            echo $this->Form->input('geo_cords');
             echo $this->Form->input('province_id', ['options' => $provinces]);
             echo $this->Form->input('country_id', ['options' => $countries]);
             echo $this->Form->input('flag_featured');

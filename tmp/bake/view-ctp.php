@@ -83,12 +83,12 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
             $details = $associationFields[$field];
 ?>
         <tr>
-            <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize($details['property']) ?>') CakePHPBakeCloseTag></th>
+            <th scope="row"><CakePHPBakeOpenTag= __('<?= Inflector::humanize($details['property']) ?>') CakePHPBakeCloseTag></th>
             <td><CakePHPBakeOpenTag= $<?= $singularVar ?>->has('<?= $details['property'] ?>') ? $this->Html->link($<?= $singularVar ?>-><?= $details['property'] ?>-><?= $details['displayField'] ?>, ['controller' => '<?= $details['controller'] ?>', 'action' => 'view', $<?= $singularVar ?>-><?= $details['property'] ?>-><?= $details['primaryKey'][0] ?>]) : '' CakePHPBakeCloseTag></td>
         </tr>
 <?php else : ?>
         <tr>
-            <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
+            <th scope="row"><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
             <td><CakePHPBakeOpenTag= h($<?= $singularVar ?>-><?= $field ?>) CakePHPBakeCloseTag></td>
         </tr>
 <?php endif; ?>
@@ -97,7 +97,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <?php if ($associations['HasOne']) : ?>
 <?php foreach ($associations['HasOne'] as $alias => $details) : ?>
         <tr>
-            <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) ?>') CakePHPBakeCloseTag></th>
+            <th scope="row"><CakePHPBakeOpenTag= __('<?= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) ?>') CakePHPBakeCloseTag></th>
             <td><CakePHPBakeOpenTag= $<?= $singularVar ?>->has('<?= $details['property'] ?>') ? $this->Html->link($<?= $singularVar ?>-><?= $details['property'] ?>-><?= $details['displayField'] ?>, ['controller' => '<?= $details['controller'] ?>', 'action' => 'view', $<?= $singularVar ?>-><?= $details['property'] ?>-><?= $details['primaryKey'][0] ?>]) : '' CakePHPBakeCloseTag></td>
         </tr>
 <?php endforeach; ?>
@@ -105,7 +105,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <?php if ($groupedFields['number']) : ?>
 <?php foreach ($groupedFields['number'] as $field) : ?>
         <tr>
-            <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
+            <th scope="row"><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
             <td><CakePHPBakeOpenTag= $this->Number->format($<?= $singularVar ?>-><?= $field ?>) CakePHPBakeCloseTag></td>
         </tr>
 <?php endforeach; ?>
@@ -113,7 +113,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <?php if ($groupedFields['date']) : ?>
 <?php foreach ($groupedFields['date'] as $field) : ?>
         <tr>
-            <th><?= "<?= __('" . Inflector::humanize($field) . "') ?>" ?></th>
+            <th scope="row"><?= "<?= __('" . Inflector::humanize($field) . "') ?>" ?></th>
             <td><CakePHPBakeOpenTag= h($<?= $singularVar ?>-><?= $field ?>) CakePHPBakeCloseTag></td>
         </tr>
 <?php endforeach; ?>
@@ -121,7 +121,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <?php if ($groupedFields['boolean']) : ?>
 <?php foreach ($groupedFields['boolean'] as $field) : ?>
         <tr>
-            <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
+            <th scope="row"><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
             <td><CakePHPBakeOpenTag= $<?= $singularVar ?>-><?= $field ?> ? __('Yes') : __('No'); CakePHPBakeCloseTag></td>
         </tr>
 <?php endforeach; ?>
@@ -147,9 +147,9 @@ foreach ($relations as $alias => $details):
         <table cellpadding="0" cellspacing="0">
             <tr>
 <?php foreach ($details['fields'] as $field): ?>
-                <th><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
+                <th scope="col"><CakePHPBakeOpenTag= __('<?= Inflector::humanize($field) ?>') CakePHPBakeCloseTag></th>
 <?php endforeach; ?>
-                <th class="actions"><CakePHPBakeOpenTag= __('Actions') CakePHPBakeCloseTag></th>
+                <th scope="col" class="actions"><CakePHPBakeOpenTag= __('Actions') CakePHPBakeCloseTag></th>
             </tr>
             <CakePHPBakeOpenTagphp foreach ($<?= $singularVar ?>-><?= $details['property'] ?> as $<?= $otherSingularVar ?>): CakePHPBakeCloseTag>
             <tr>

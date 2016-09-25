@@ -182,6 +182,8 @@ Request::addDetector('tablet', function ($request) {
 
 Plugin::load('Migrations');
 
+Plugin::load('Geo');
+
 
 
 //Plugin::load('CakeDC/Users', ['routes' => true, 'bootstrap' => true]);
@@ -239,7 +241,7 @@ Configure::write( 'googleSiteKey',   '6LeqIBoTAAAAAKRkTNgt0eKaBevFKeDjw9Dgqyb4')
 Configure::write( 'googleSecretKey', '6LeqIBoTAAAAAMDx8sEPYA7e_aO1-KHXHS8nP3Pt');
 
 
- Cache::disable();
+Cache::disable();
 
 
 

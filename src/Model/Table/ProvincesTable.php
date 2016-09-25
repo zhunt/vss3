@@ -24,6 +24,11 @@ class ProvincesTable extends Table
         $this->table('provinces');
         $this->displayField('name');
         $this->primaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Muffin/Slug.Slug');
+
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_id'
         ]);
@@ -64,4 +69,16 @@ class ProvincesTable extends Table
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
         return $rules;
     }
+
+
+    // --------------
+
+    public function updateProvince(array $options) {
+        $newProvince = $options['name'];
+        $countryId = $options['country_id'];
+        $province = $this->findOrCreate(['name' => $newProvince, 'country_id' => $countryId ]); debug($province);
+
+        return $province->id;
+    }
+
 }

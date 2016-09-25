@@ -39,6 +39,7 @@ class VenuesTable extends Table
     {
         $schema->columnType('geo_cords', 'point');
         return $schema;
+
     }
 
     /**
@@ -62,6 +63,7 @@ class VenuesTable extends Table
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id'
         ]);
+
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_id'
         ]);
@@ -213,7 +215,7 @@ class VenuesTable extends Table
     {
         $rules->add($rules->existsIn(['province_id'], 'Provinces'));
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
-        $rules->add($rules->existsIn(['city_id'], 'Cities'));
+       // $rules->add($rules->existsIn(['city_id'], 'Cities'));
         $rules->add($rules->existsIn(['neighbourhood_id'], 'Neighbourhoods'));
         $rules->add($rules->existsIn(['establishment_type_id'], 'EstablishmentTypes'));
         $rules->add($rules->existsIn(['inside_venue_id'], 'InsideVenues'));

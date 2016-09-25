@@ -11,7 +11,6 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "*",
         "muffin/tags": "dev-master",
-        "muffin/slug": "^1.1",
         "league/flysystem": "^1.0",
         "league/glide": "^1.0",
         "intervention/imagecache": "^2.3",
@@ -24,7 +23,8 @@
         "friendsofcake/bootstrap-ui": "~0.3",
         "muffin/slug": "~1.0",
         "league/commonmark": "0.11",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "dereuromark/cakephp-geo": "^1.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",

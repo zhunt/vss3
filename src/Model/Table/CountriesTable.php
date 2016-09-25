@@ -24,6 +24,11 @@ class CountriesTable extends Table
         $this->table('countries');
         $this->displayField('name');
         $this->primaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Muffin/Slug.Slug');
+
         $this->hasMany('Cities', [
             'foreignKey' => 'country_id'
         ]);
@@ -49,5 +54,14 @@ class CountriesTable extends Table
             ->notEmpty('name');
 
         return $validator;
+    }
+
+    // --------------
+
+    public function updateCountry(array $options) {
+        $newCountry = $options['name'];
+        $country = $this->findOrCreate(['name' => $newCountry ]); debug($country);
+
+        return $country->id;
     }
 }

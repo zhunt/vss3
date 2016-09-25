@@ -1,13 +1,21 @@
 <?php
 namespace App\Controller\Admin;
 
+
+
+
+use Cake\ORM\TableRegistry;
+
 use App\Controller\AppController;
+
+
 
 /**
  * Venues Controller
  *
  * @property \App\Model\Table\VenuesTable $Venues
  */
+
 class VenuesController extends AppController
 {
 
@@ -54,13 +62,72 @@ class VenuesController extends AppController
     {
         $venue = $this->Venues->newEntity();
         if ($this->request->is('post')) {
-            $venue = $this->Venues->patchEntity($venue, $this->request->data);
-            debug($venue);
+
+            $address = $this->request->data['address']; //debug($address); // here
+
+             $this->loadComponent('Geocode');
+
+             // remove temp - we use data here
+             $data = $this->Geocode->geocodeAddress($address);
+
+
+/*
+$data=
+[
+    'country' => 'Canada',
+    'province' => 'Ontario',
+    'provinceRegion' => 'Toronto Division',
+    'provinceRegionLatt' => 43.6689775,
+    'provinceRegionLong' => 43.6689775,
+    'city' => 'Toronto',
+    'cityLatt' => 43.653226,
+    'cityLong' => 43.653226,
+    'cityRegion' => 'Old Toronto',
+    'cityRegionLatt' => 43.653226,
+    'cityRegionLong' => 43.653226,
+    'admin3' => '',
+    'admin4' => '',
+    'admin5' => '',
+    'geoLatt' => 43.6534199,
+    'geoLong' => -79.3899873
+];
+*/
+
+
+            $locationData = $this->Geocode->saveGeoData($data);
+
+
+            $this->request->data = [
+            'name' => $this->request->data['name'],
+            'address' => $this->request->data['address'],
+            'geo_cords' => $data['geoLatt'] . ', ' . $data['geoLong'],
+            'country_id' => $locationData['countryId'],
+            'province_id' => $locationData['provinceId'],
+            'province_region_id' => $locationData['provinceRegionId'],
+            'city_id' => $locationData['cityId'],
+            'city_region_id' => $locationData['cityRegionId'],
+
+            'neighbourhood_id' => 1,
+            'establishment_type_id' => 1
+
+
+            ];
+
+
+
+
+            //$this->request->data 43.653226, -79.383184
+
+
+            // ---------------
+            $venue = $this->Venues->patchEntity($venue, $this->request->data, ['validate' => true] );
+            //debug($venue); 
             if ($this->Venues->save($venue)) {
                 $this->Flash->success(__('The venue has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             } else {
+                debug( $venue->errors() );
                 $this->Flash->error(__('The venue could not be saved. Please, try again.'));
             }
         }
@@ -77,6 +144,44 @@ class VenuesController extends AppController
         $this->set(compact('venue', 'provinces', 'countries', 'cities', 'neighbourhoods', 'establishmentTypes', 'insideVenues', 'amenities', 'cuisines', 'features', 'venuePhotos'));
         $this->set('_serialize', ['venue']);
     }
+
+/*
+    public function query() {
+        $this->Geocoder = new Geocoder();
+        $results = [];
+        $country = $this->Countries->newEntity();
+        if ($this->Common->isPosted()) {
+            $this->Countries->validator()->add('address', [
+                'notEmpty' => [
+                    'rule' => 'notBlank',
+                    'message' => 'valErrMandatoryField',
+                    'last' => true
+                ]]);
+            $country = $this->Countries->patchEntity($country, $this->request->data);
+            $address = $this->request->data['address'];
+            $settings = [
+                'allowInconclusive' => $this->request->data['allow_inconclusive'],
+                'minAccuracy' => $this->request->data['min_accuracy']
+            ];
+            $this->Geocoder->config($settings);
+            if (!$country->errors()) {
+                try {
+                    $results = $this->Geocoder->geocode($address);
+                } catch (InconclusiveException $e) {
+                    $this->Flash->error(__('Nothing found'));
+                }
+            } else {
+                $this->Flash->error(__('formContainsErrors'));
+            }
+        } else {
+            $this->request->data['allow_inconclusive'] = 1;
+            $this->request->data['min_accuracy'] = Geocoder::TYPE_COUNTRY;
+        }
+        $minAccuracies = $this->Geocoder->accuracyTypes();
+        $this->set(compact('country', 'results', 'minAccuracies'));
+    }
+    */
+
 
 
     /**

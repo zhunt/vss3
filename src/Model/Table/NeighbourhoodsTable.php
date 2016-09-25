@@ -68,9 +68,9 @@ class NeighbourhoodsTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
-        $validator
+      /*  $validator
             ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
+            ->notEmpty('slug'); 
 
         $validator
             ->requirePresence('page_url', 'create')
@@ -91,6 +91,7 @@ class NeighbourhoodsTable extends Table
         $validator
             ->requirePresence('seo_title', 'create')
             ->notEmpty('seo_title');
+            */
 
         return $validator;
     }
